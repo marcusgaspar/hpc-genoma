@@ -1,0 +1,11 @@
+{
+    "blobs": [
+        {
+            "checksum": "592abe8dbb273b00319692143bfc2618",
+            "path": "aznfs_install.sh"
+        }
+    ],
+    "name": "genomica-proj",
+    "type": "application",
+    "version": "1.0.0"
+}
