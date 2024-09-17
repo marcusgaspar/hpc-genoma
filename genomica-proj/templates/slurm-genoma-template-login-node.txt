@@ -64,7 +64,7 @@ Autoscale = $Autoscale
         cluster.identities.default = $ManagedIdentity
 
         [[[cluster-init cyclecloud/slurm:default:3.0.7]]]
-	[[[cluster-init genomica-proj:default:1.0.0]]]
+	    [[[cluster-init genomica-proj:default:1.0.0]]]
         Optional = true
 
         [[[volume boot]]]
@@ -182,11 +182,11 @@ Autoscale = $Autoscale
         InitialCount = $NumberLoginNodes
         MachineType = $loginMachineType
         ImageName = $SchedulerImageName
-	SubnetId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/virtualNetworks/mg-vnet-hpc-eastus/subnets/user-subnet"
+	    #SubnetId = ""
 
     	[[[network-interface vm-login-node-cluster1-nic2]]]
-	#NetworkInterfaceId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/networkInterfaces/vm-login-node-cluster1-nic"
-	PrivateIp = "10.4.2.199"
+	    #NetworkInterfaceId = ""
+	    PrivateIp = "10.4.2.199"
 
         [[[cluster-init cyclecloud/slurm:login:3.0.7]]]
         [[[configuration]]]
