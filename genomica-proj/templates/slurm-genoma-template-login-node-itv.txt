@@ -4,7 +4,7 @@
 ################################
 
 
-[cluster Slurm-Genoma4]
+[cluster Slurm-Genoma-ITV]
 FormLayout = selectionpanel
 IconUrl = https://raw.githubusercontent.com/marcusgaspar/azurehpc/892f729a1450dfec6436d68251ae71752d2a4542/apps/wrf/images/logo-genoma.jpeg
 Category = Schedulers

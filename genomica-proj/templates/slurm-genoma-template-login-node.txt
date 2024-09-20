@@ -4,7 +4,7 @@
 ################################
 
 
-[cluster Slurm-Genoma3]
+[cluster Slurm-Genoma4]
 FormLayout = selectionpanel
 IconUrl = https://raw.githubusercontent.com/marcusgaspar/azurehpc/892f729a1450dfec6436d68251ae71752d2a4542/apps/wrf/images/logo-genoma.jpeg
 Category = Schedulers
@@ -182,11 +182,15 @@ Autoscale = $Autoscale
         InitialCount = $NumberLoginNodes
         MachineType = $loginMachineType
         ImageName = $SchedulerImageName
-	    #SubnetId = ""
+	    SubnetId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/virtualNetworks/mg-vnet-hpc-eastus/subnets/user-subnet"
+        #itv
+        #SubnetId = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdsnetrg/providers/Microsoft.Network/virtualNetworks/azusdshpcvnet/subnets/azusdshpcsnet"
 
     	[[[network-interface vm-login-node-cluster1-nic2]]]
 	    #NetworkInterfaceId = ""
-	    #PrivateIp = ""
+	    PrivateIp = "10.4.2.250"
+        #itv
+        #PrivateIp = "10.20.3.62"
 
         [[[cluster-init cyclecloud/slurm:login:3.0.7]]]
         [[[configuration]]]
@@ -287,25 +291,25 @@ Order = 10
         Label = Login node VM Type
         Description = The VM type for login nodes.
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_D8as_v4
+        DefaultValue = Standard_D2ads_v5
 
         [[[parameter HPCMachineType]]]
         Label = HPC VM Type
         Description = The VM type for HPC execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_F2s_v2
+        DefaultValue = Standard_E64as_v5
 
         [[[parameter HTCMachineType]]]
         Label = HTC VM Type
         Description = The VM type for HTC execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_F2s_v2
+        DefaultValue = Standard_E64as_v5
 
         [[[parameter DynamicMachineType]]]
         Label = Dyn VM Type
         Description = The VM type for Dynamic execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_F2s_v2
+        DefaultValue = Standard_E64as_v5
         Config.MultiSelect = true
 
 
@@ -397,6 +401,9 @@ Order = 10
         Description = Subnet Resource Path (ResourceGroup/VirtualNetwork/Subnet)
         ParameterType = Azure.Subnet
         Required = True
+        DefaultValue = "mg-rg-hpc/mg-vnet-hpc-eastus/compute-subnet"
+        #itv
+        #DefaultValue = "azusdsnetrg/azusdshpcvnet/azusdshpcsnet003"
 
     [[parameters High Availability]]
     Order = 50
@@ -560,7 +567,7 @@ Order = 15
         [[[parameter FilesystemSize]]]
         Label = Size (GB)
         Description = The filesystem size (cannot be changed after initial start)
-        DefaultValue = 100
+        DefaultValue = 200
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 10
         Config.MaxValue = 10240
@@ -578,7 +585,8 @@ Order = 15
 
         [[[parameter AdditionalNFS1]]]
         HideLabel = true
-        DefaultValue = false
+        #itv
+        DefaultValue = true
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Add Shared Filesystem mount
 
@@ -595,6 +603,9 @@ Order = 15
         Label = IP Address 
         Description = The IP address or hostname of the additional mount. Also accepts a list comma-separated addresses, for example, to mount a frontend load-balanced Azure HPC Cache.
         Config.ParameterType = String
+        DefaultValue = "10.4.0.20"
+        #itv
+        #DefaultValue = "10.20.3.132"
         Conditions.Excluded := AdditionalNFS1 isnt true
 
         [[[parameter AdditionalNFSMountPoint1]]]
@@ -606,7 +617,10 @@ Order = 15
         [[[parameter AdditionalNFSExportPath1]]]
         Label = Export Path
         Description = The path exported by the file system
-        DefaultValue = /anf-vol1/genomica/data1
+        DefaultValue = "/anf-vol1/genomica"
+        #itv        
+        #DefaultValue = "/azusdshpcvol002"
+        
         Conditions.Excluded := AdditionalNFS1 isnt true
 
         [[[parameter AdditionalNFSMountOptions1]]]
@@ -639,19 +653,16 @@ Order = 15
         [[[parameter AdditionalNFSMountPoint2]]]
         Label = Mount Point
         Description = The path at which to mount the Filesystem
-        DefaultValue = /data2
         Conditions.Excluded := AdditionalNFS2 isnt true
 
         [[[parameter AdditionalNFSExportPath2]]]
         Label = Export Path
         Description = The path exported by the file system
-        DefaultValue = /sa-vol1/genomica/data2
         Conditions.Excluded := AdditionalNFS2 isnt true
 
         [[[parameter AdditionalNFSMountOptions2]]]
         Label = Mount Options
         Description = Filesystem Client Mount Options
-        DefaultValue = "defaults,sec=sys,vers=3,nolock,proto=tcp,nconnect=16,nofail,_netdev" 
         Conditions.Excluded := AdditionalNFS2 isnt true
     
 
@@ -663,7 +674,10 @@ Order = 20
 
         [[[parameter Credentials]]]
         Description = The credentials for the cloud provider
-        ParameterType = Cloud.Credentials
+        ParameterType = Cloud.Credentials        
+        DefaultValue = "GBB HPC - Default credentials"
+        #itv
+        #DefaultValue = "Genomics - Default credentials"
 
         [[[parameter ManagedIdentity]]]
         Label = Managed Id
@@ -703,7 +717,7 @@ Order = 20
 
         [[[parameter configuration_slurm_accounting_enabled]]]
         Label = Job Accounting
-        DefaultValue = false
+        DefaultValue = true
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Configure Slurm job accounting
 
@@ -716,22 +730,30 @@ Order = 20
         [[[parameter configuration_slurm_accounting_url]]]
         Label = Slurm DBD URL
         Description = URL of the database to use for Slurm job accounting
+        #itv
+        DefaultValue = "azusdshpcmysql.mysql.database.azure.com"
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_storageloc]]]
         Label = Database name
         Description = Database name to store slurm accounting records
+        #itv
+        DefaultValue = "genomics"        
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_user]]]
         Label = Slurm DBD User
         Description = User for Slurm DBD admin
+        #itv
+        DefaultValue = "dbmysql_ds_usr"
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_password]]]
         Label = Slurm DBD Password
         Description = Password for Slurm DBD admin
         ParameterType = Password
+        #itv
+        DefaultValue = "teste"        
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_certificate_url]]]
@@ -742,7 +764,7 @@ Order = 20
         Config.Plugin = pico.form.Dropdown
         Config.FreeForm = true
         Config.Entries := {[Value=""], [Value="AzureCA.pem"]}
-        DefaultValue = ""
+        DefaultValue = "https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem"
 
         [[[parameter configuration_slurm_shutdown_policy]]]
 	    Label = Shutdown Policy
@@ -814,21 +836,27 @@ Order = 20
         Label = HPC OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
+        #DefaultValue = almalinux8
+        #itv
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter HTCImageName]]]
         Label = HTC OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
+        #DefaultValue = almalinux8
+        #itv
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter DynamicImageName]]]
         Label = Dynamic OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
+        #DefaultValue = almalinux8
+        #itv
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"        
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter SchedulerClusterInitSpecs]]]
@@ -866,13 +894,15 @@ Order = 20
 
         [[[parameter ReturnProxy]]]
         Label = Return Proxy
-        DefaultValue = true
+        #itv
+        DefaultValue = false
         ParameterType = Boolean
         Config.Label = Use SSH tunnel to connect to CycleCloud (required if direct access is blocked)
 
         [[[parameter UsePublicNetwork]]]
         Label = Public Head Node
-        DefaultValue = true
+        #itv
+        DefaultValue = false
         ParameterType = Boolean
         Config.Label = Access scheduler node from the Internet
 
