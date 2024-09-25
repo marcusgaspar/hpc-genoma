@@ -285,31 +285,41 @@ Order = 10
         Label = Scheduler VM Type
         Description = The VM type for scheduler node
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_D4ads_v5
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_D4ads_v5
 
         [[[parameter loginMachineType]]]
         Label = Login node VM Type
         Description = The VM type for login nodes.
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_D2ads_v5
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_D2ads_v5
 
         [[[parameter HPCMachineType]]]
         Label = HPC VM Type
         Description = The VM type for HPC execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_E64as_v5
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5
 
         [[[parameter HTCMachineType]]]
         Label = HTC VM Type
         Description = The VM type for HTC execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_E64as_v5
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5
 
         [[[parameter DynamicMachineType]]]
         Label = Dyn VM Type
         Description = The VM type for Dynamic execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_E64as_v5
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5
         Config.MultiSelect = true
 
 
