@@ -731,21 +731,21 @@ Order = 20
         Label = Slurm DBD URL
         Description = URL of the database to use for Slurm job accounting
         #itv
-        DefaultValue = "azusdshpcmysql.mysql.database.azure.com"
+        #DefaultValue = "azusdshpcmysql.mysql.database.azure.com"
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_storageloc]]]
         Label = Database name
         Description = Database name to store slurm accounting records
         #itv
-        DefaultValue = "genomics"        
+        #DefaultValue = "genomics"        
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_user]]]
         Label = Slurm DBD User
         Description = User for Slurm DBD admin
         #itv
-        DefaultValue = "dbmysql_ds_usr"
+        #DefaultValue = "dbmysql_ds_usr"
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_password]]]
@@ -753,7 +753,7 @@ Order = 20
         Description = Password for Slurm DBD admin
         ParameterType = Password
         #itv
-        DefaultValue = "teste"        
+        #DefaultValue = "teste"        
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_certificate_url]]]
@@ -836,27 +836,27 @@ Order = 20
         Label = HPC OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        #DefaultValue = almalinux8
+        DefaultValue = almalinux8
         #itv
-        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter HTCImageName]]]
         Label = HTC OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        #DefaultValue = almalinux8
+        DefaultValue = almalinux8
         #itv
-        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter DynamicImageName]]]
         Label = Dynamic OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        #DefaultValue = almalinux8
+        DefaultValue = almalinux8
         #itv
-        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"        
+        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"        
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter SchedulerClusterInitSpecs]]]
