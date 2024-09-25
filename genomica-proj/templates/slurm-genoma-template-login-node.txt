@@ -717,7 +717,9 @@ Order = 20
 
         [[[parameter configuration_slurm_accounting_enabled]]]
         Label = Job Accounting
-        DefaultValue = true
+        DefaultValue = false
+        #itv
+        #DefaultValue = true
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Configure Slurm job accounting
 
@@ -764,7 +766,8 @@ Order = 20
         Config.Plugin = pico.form.Dropdown
         Config.FreeForm = true
         Config.Entries := {[Value=""], [Value="AzureCA.pem"]}
-        DefaultValue = "https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem"
+        #itv
+        #DefaultValue = "https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem"
 
         [[[parameter configuration_slurm_shutdown_policy]]]
 	    Label = Shutdown Policy
