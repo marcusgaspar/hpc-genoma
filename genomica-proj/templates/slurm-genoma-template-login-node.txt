@@ -4,7 +4,7 @@
 ################################
 
 
-[cluster Slurm-Genoma4]
+[cluster Slurm-Genoma5]
 FormLayout = selectionpanel
 IconUrl = https://raw.githubusercontent.com/marcusgaspar/azurehpc/892f729a1450dfec6436d68251ae71752d2a4542/apps/wrf/images/logo-genoma.jpeg
 Category = Schedulers
@@ -211,6 +211,54 @@ Autoscale = $Autoscale
         [[[network-interface eth0]]]
         AssociatePublicIpAddress = $ExecuteNodesPublic
 
+    #low_gen
+    [[nodearray low_gen]]
+    Extends = nodearraybase
+    MachineType = $low_genMachineType
+    ImageName = $low_genImageName
+    MaxCoreCount = $Maxlow_genExecuteCoreCount
+    Azure.MaxScalesetSize = $low_genMaxScalesetSize
+    AdditionalClusterInitSpecs = $low_genClusterInitSpecs
+    EnableNodeHealthChecks = $EnableNodeHealthChecks
+
+
+        [[[configuration]]]
+        slurm.default_partition = false
+        slurm.hpc = false
+        slurm.partition = low_gen
+
+    #medium_gen
+    [[nodearray medium_gen]]
+    Extends = nodearraybase
+    MachineType = $medium_genMachineType
+    ImageName = $medium_genImageName
+    MaxCoreCount = $Maxmedium_genExecuteCoreCount
+    Azure.MaxScalesetSize = $medium_genMaxScalesetSize
+    AdditionalClusterInitSpecs = $medium_genClusterInitSpecs
+    EnableNodeHealthChecks = $EnableNodeHealthChecks
+
+
+        [[[configuration]]]
+        slurm.default_partition = false
+        slurm.hpc = false
+        slurm.partition = medium_gen        
+        
+    #high_gen
+    [[nodearray high_gen]]
+    Extends = nodearraybase
+    MachineType = $high_genMachineType
+    ImageName = $high_genImageName
+    MaxCoreCount = $Maxhigh_genExecuteCoreCount
+    Azure.MaxScalesetSize = $high_genMaxScalesetSize
+    AdditionalClusterInitSpecs = $high_genClusterInitSpecs
+    EnableNodeHealthChecks = $EnableNodeHealthChecks
+
+
+        [[[configuration]]]
+        slurm.default_partition = false
+        slurm.hpc = false
+        slurm.partition = high_gen        
+
     [[nodearray hpc]]
     Extends = nodearraybase
     MachineType = $HPCMachineType
@@ -297,6 +345,34 @@ Order = 10
         #itv
         #DefaultValue = Standard_D2ads_v5
 
+        #low_gen
+        [[[parameter low_genMachineType]]]
+        Label = low_gen VM Type
+        Description = The VM type for low_gen execute nodes
+        ParameterType = Cloud.MachineType
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5
+
+        #medium_gen
+        [[[parameter medium_genMachineType]]]
+        Label = medium_gen VM Type
+        Description = The VM type for medium_gen execute nodes
+        ParameterType = Cloud.MachineType
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5
+
+        #high_gen
+        [[[parameter high_genMachineType]]]
+        Label = high_gen VM Type
+        Description = The VM type for high_gen execute nodes
+        ParameterType = Cloud.MachineType
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5        
+
+
         [[[parameter HPCMachineType]]]
         Label = HPC VM Type
         Description = The VM type for HPC execute nodes
@@ -333,6 +409,33 @@ Order = 10
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Start and stop execute instances automatically
 
+        #low_gen
+        [[[parameter Maxlow_genExecuteCoreCount]]]
+        Label = Max low_gen Cores
+        Description = The total number of low_gen execute cores to start
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true
+
+        #medium_gen
+        [[[parameter Maxmedium_genExecuteCoreCount]]]
+        Label = Max medium_gen Cores
+        Description = The total number of medium_gen execute cores to start
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true        
+
+        #high_gen
+        [[[parameter Maxhigh_genExecuteCoreCount]]]
+        Label = Max high_gen Cores
+        Description = The total number of high_gen execute cores to start
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true                
+
         [[[parameter MaxHPCExecuteCoreCount]]]
         Label = Max HPC Cores
         Description = The total number of HPC execute cores to start
@@ -356,6 +459,33 @@ Order = 10
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
         Config.IntegerOnly = true
+
+        #low_gen
+        [[[parameter low_genMaxScalesetSize]]]
+        Label = Max VMs per VMSS
+        Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true
+
+        #medium_gen
+        [[[parameter medium_genMaxScalesetSize]]]
+        Label = Max VMs per VMSS
+        Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true        
+
+        #high_gen
+        [[[parameter high_genMaxScalesetSize]]]
+        Label = Max VMs per VMSS
+        Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true                
 
         [[[parameter HPCMaxScalesetSize]]]
         Label = Max VMs per VMSS
@@ -845,6 +975,37 @@ Order = 20
         DefaultValue = almalinux8
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
+        #low_gen
+        [[[parameter low_genImageName]]]
+        Label = low_gen OS
+        ParameterType = Cloud.Image
+        Config.OS = linux
+        DefaultValue = almalinux8
+        #itv
+        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
+
+        #medium_gen
+        [[[parameter medium_genImageName]]]
+        Label = medium_gen OS
+        ParameterType = Cloud.Image
+        Config.OS = linux
+        DefaultValue = almalinux8
+        #itv
+        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
+
+        #high_gen
+        [[[parameter high_genImageName]]]
+        Label = high_gen OS
+        ParameterType = Cloud.Image
+        Config.OS = linux
+        DefaultValue = almalinux8
+        #itv
+        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
+
+
         [[[parameter HPCImageName]]]
         Label = HPC OS
         ParameterType = Cloud.Image
@@ -884,6 +1045,28 @@ Order = 20
         Description = Cluster init specs to apply to HTC execute nodes
         ParameterType = Cloud.ClusterInitSpecs
         
+        #low_gen
+        [[[parameter low_genClusterInitSpecs]]]
+        Label = low_gen Cluster-Init
+        DefaultValue = =undefined
+        Description = Cluster init specs to apply to low_gen execute nodes
+        ParameterType = Cloud.ClusterInitSpecs
+
+        #medium_gen
+        [[[parameter medium_genClusterInitSpecs]]]
+        Label = medium_gen Cluster-Init
+        DefaultValue = =undefined
+        Description = Cluster init specs to apply to medium_gen execute nodes
+        ParameterType = Cloud.ClusterInitSpecs        
+
+        #high_gen
+        [[[parameter high_genClusterInitSpecs]]]
+        Label = high_gen Cluster-Init
+        DefaultValue = =undefined
+        Description = Cluster init specs to apply to high_gen execute nodes
+        ParameterType = Cloud.ClusterInitSpecs        
+
+
         [[[parameter HPCClusterInitSpecs]]]
         Label = HPC Cluster-Init
         DefaultValue = =undefined
