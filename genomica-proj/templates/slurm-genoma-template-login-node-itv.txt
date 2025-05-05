@@ -182,11 +182,13 @@ Autoscale = $Autoscale
         InitialCount = $NumberLoginNodes
         MachineType = $loginMachineType
         ImageName = $SchedulerImageName
+        SubnetId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/virtualNetworks/mg-vnet-hpc-eastus/subnets/user-subnet"
         #itv
-        SubnetId = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdsnetrg/providers/Microsoft.Network/virtualNetworks/azusdshpcvnet/subnets/azusdshpcsnet"
+        #SubnetId = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdsnetrg/providers/Microsoft.Network/virtualNetworks/azusdshpcvnet/subnets/azusdshpcsnet"
 
     	[[[network-interface vm-login-node-cluster1-nic2]]]
 	    #NetworkInterfaceId = ""
+        PrivateIp = "10.4.2.250"
         #itv
         PrivateIp = "10.20.3.62"
 
