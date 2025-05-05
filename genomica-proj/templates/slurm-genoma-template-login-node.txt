@@ -4,7 +4,7 @@
 ################################
 
 
-[cluster Slurm-Genoma5]
+[cluster Slurm-Genoma-ITV]
 FormLayout = selectionpanel
 IconUrl = https://raw.githubusercontent.com/marcusgaspar/azurehpc/892f729a1450dfec6436d68251ae71752d2a4542/apps/wrf/images/logo-genoma.jpeg
 Category = Schedulers
@@ -182,13 +182,13 @@ Autoscale = $Autoscale
         InitialCount = $NumberLoginNodes
         MachineType = $loginMachineType
         ImageName = $SchedulerImageName
-	    SubnetId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/virtualNetworks/mg-vnet-hpc-eastus/subnets/user-subnet"
+        SubnetId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/virtualNetworks/mg-vnet-hpc-eastus/subnets/user-subnet"
         #itv
         #SubnetId = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdsnetrg/providers/Microsoft.Network/virtualNetworks/azusdshpcvnet/subnets/azusdshpcsnet"
 
     	[[[network-interface vm-login-node-cluster1-nic2]]]
 	    #NetworkInterfaceId = ""
-	    PrivateIp = "10.4.2.250"
+        PrivateIp = "10.4.2.250"
         #itv
         #PrivateIp = "10.20.3.62"
 
@@ -212,6 +212,7 @@ Autoscale = $Autoscale
         AssociatePublicIpAddress = $ExecuteNodesPublic
 
     #low_gen
+    #itv
     [[nodearray low_gen]]
     Extends = nodearraybase
     MachineType = $low_genMachineType
@@ -228,6 +229,7 @@ Autoscale = $Autoscale
         slurm.partition = low_gen
 
     #medium_gen
+    #itv
     [[nodearray medium_gen]]
     Extends = nodearraybase
     MachineType = $medium_genMachineType
@@ -244,6 +246,7 @@ Autoscale = $Autoscale
         slurm.partition = medium_gen        
         
     #high_gen
+    #itv
     [[nodearray high_gen]]
     Extends = nodearraybase
     MachineType = $high_genMachineType
@@ -258,6 +261,23 @@ Autoscale = $Autoscale
         slurm.default_partition = false
         slurm.hpc = false
         slurm.partition = high_gen        
+
+    #ultra_gen
+    #itv
+    [[nodearray ultra_gen]]
+    Extends = nodearraybase
+    MachineType = $ultra_genMachineType
+    ImageName = $ultra_genImageName
+    MaxCoreCount = $Maxultra_genExecuteCoreCount
+    Azure.MaxScalesetSize = $ultra_genMaxScalesetSize
+    AdditionalClusterInitSpecs = $ultra_genClusterInitSpecs
+    EnableNodeHealthChecks = $EnableNodeHealthChecks
+
+
+        [[[configuration]]]
+        slurm.default_partition = false
+        slurm.hpc = false
+        slurm.partition = ultra_gen    
 
     [[nodearray hpc]]
     Extends = nodearraybase
@@ -333,17 +353,15 @@ Order = 10
         Label = Scheduler VM Type
         Description = The VM type for scheduler node
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_D4ads_v5
+        DefaultValue = Standard_D4ads_v5
 
         [[[parameter loginMachineType]]]
         Label = Login node VM Type
         Description = The VM type for login nodes.
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_D2ads_v5
+        DefaultValue = Standard_D4ads_v5
 
         #low_gen
         [[[parameter low_genMachineType]]]
@@ -352,7 +370,7 @@ Order = 10
         ParameterType = Cloud.MachineType
         DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_E64as_v5
+        #DefaultValue = Standard_F32s_v2
 
         #medium_gen
         [[[parameter medium_genMachineType]]]
@@ -361,7 +379,7 @@ Order = 10
         ParameterType = Cloud.MachineType
         DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_E64as_v5
+        #DefaultValue = Standard_F64s_v2
 
         #high_gen
         [[[parameter high_genMachineType]]]
@@ -372,30 +390,32 @@ Order = 10
         #itv
         #DefaultValue = Standard_E64as_v5        
 
+        #ultra_gen
+        [[[parameter ultra_genMachineType]]]
+        Label = ultra_gen VM Type
+        Description = The VM type for ultra_gen execute nodes
+        ParameterType = Cloud.MachineType
+        DefaultValue = Standard_FX4mds
+        #itv
+        #DefaultValue = Standard_E64as_v5   
 
         [[[parameter HPCMachineType]]]
         Label = HPC VM Type
         Description = The VM type for HPC execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
-        #itv
-        #DefaultValue = Standard_E64as_v5
+        DefaultValue = Standard_E64as_v5
 
         [[[parameter HTCMachineType]]]
         Label = HTC VM Type
         Description = The VM type for HTC execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
-        #itv
-        #DefaultValue = Standard_E64as_v5
+        DefaultValue = Standard_E64as_v5
 
         [[[parameter DynamicMachineType]]]
         Label = Dyn VM Type
         Description = The VM type for Dynamic execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
-        #itv
-        #DefaultValue = Standard_E64as_v5
+        DefaultValue = Standard_E64as_v5
         Config.MultiSelect = true
 
 
@@ -413,7 +433,7 @@ Order = 10
         [[[parameter Maxlow_genExecuteCoreCount]]]
         Label = Max low_gen Cores
         Description = The total number of low_gen execute cores to start
-        DefaultValue = 100
+        DefaultValue = 128
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
         Config.IntegerOnly = true
@@ -422,7 +442,7 @@ Order = 10
         [[[parameter Maxmedium_genExecuteCoreCount]]]
         Label = Max medium_gen Cores
         Description = The total number of medium_gen execute cores to start
-        DefaultValue = 100
+        DefaultValue = 128
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
         Config.IntegerOnly = true        
@@ -431,15 +451,24 @@ Order = 10
         [[[parameter Maxhigh_genExecuteCoreCount]]]
         Label = Max high_gen Cores
         Description = The total number of high_gen execute cores to start
-        DefaultValue = 100
+        DefaultValue = 128
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
-        Config.IntegerOnly = true                
+        Config.IntegerOnly = true     
+
+        #ultra_gen
+        [[[parameter Maxultra_genExecuteCoreCount]]]
+        Label = Max ultra_gen Cores
+        Description = The total number of ultra_gen execute cores to start
+        DefaultValue = 128
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true                     
 
         [[[parameter MaxHPCExecuteCoreCount]]]
         Label = Max HPC Cores
         Description = The total number of HPC execute cores to start
-        DefaultValue = 100
+        DefaultValue = 128
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
         Config.IntegerOnly = true
@@ -447,7 +476,7 @@ Order = 10
         [[[parameter MaxHTCExecuteCoreCount]]]
         Label = Max HTC Cores
         Description = The total number of HTC execute cores to start
-        DefaultValue = 100
+        DefaultValue = 128
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
         Config.IntegerOnly = true
@@ -455,14 +484,14 @@ Order = 10
         [[[parameter MaxDynamicExecuteCoreCount]]]
         Label = Max Dyn Cores
         Description = The total number of Dynamic execute cores to start
-        DefaultValue = 100
+        DefaultValue = 128
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
         Config.IntegerOnly = true
 
         #low_gen
         [[[parameter low_genMaxScalesetSize]]]
-        Label = Max VMs per VMSS
+        Label = low_gen Max VMs per VMSS
         Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
         DefaultValue = 100
         Config.Plugin = pico.form.NumberTextBox
@@ -471,7 +500,7 @@ Order = 10
 
         #medium_gen
         [[[parameter medium_genMaxScalesetSize]]]
-        Label = Max VMs per VMSS
+        Label = medium_gen Max VMs per VMSS
         Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
         DefaultValue = 100
         Config.Plugin = pico.form.NumberTextBox
@@ -480,15 +509,24 @@ Order = 10
 
         #high_gen
         [[[parameter high_genMaxScalesetSize]]]
-        Label = Max VMs per VMSS
+        Label = high_gen Max VMs per VMSS
         Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
         DefaultValue = 100
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 1
-        Config.IntegerOnly = true                
+        Config.IntegerOnly = true 
+
+        #ultra_gen
+        [[[parameter ultra_genMaxScalesetSize]]]
+        Label = ultra_gen Max VMs per VMSS
+        Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
+        DefaultValue = 100
+        Config.Plugin = pico.form.NumberTextBox
+        Config.MinValue = 1
+        Config.IntegerOnly = true                          
 
         [[[parameter HPCMaxScalesetSize]]]
-        Label = Max VMs per VMSS
+        Label = HPC Max VMs per VMSS
         Description = The maximum number of VMs created per VM Scaleset e.g. switch in Slurm.
         DefaultValue = 100
         Config.Plugin = pico.form.NumberTextBox
@@ -541,9 +579,8 @@ Order = 10
         Description = Subnet Resource Path (ResourceGroup/VirtualNetwork/Subnet)
         ParameterType = Azure.Subnet
         Required = True
-        DefaultValue = "mg-rg-hpc/mg-vnet-hpc-eastus/compute-subnet"
         #itv
-        #DefaultValue = "azusdsnetrg/azusdshpcvnet/azusdshpcsnet003"
+        DefaultValue = "azusdsnetrg/azusdshpcvnet/azusdshpcsnet003"
 
     [[parameters High Availability]]
     Order = 50
@@ -751,6 +788,7 @@ Order = 15
         [[[parameter AdditionalNFSMountPoint1]]]
         Label = Mount Point
         Description = The path at which to mount the Filesystem
+        #itv
         DefaultValue = /data1
         Conditions.Excluded := AdditionalNFS1 isnt true
 
@@ -815,9 +853,8 @@ Order = 20
         [[[parameter Credentials]]]
         Description = The credentials for the cloud provider
         ParameterType = Cloud.Credentials        
-        DefaultValue = "GBB HPC - Default credentials"
         #itv
-        #DefaultValue = "Genomics - Default credentials"
+        DefaultValue = "Genomics - Default credentials"
 
         [[[parameter ManagedIdentity]]]
         Label = Managed Id
@@ -857,9 +894,7 @@ Order = 20
 
         [[[parameter configuration_slurm_accounting_enabled]]]
         Label = Job Accounting
-        DefaultValue = false
-        #itv
-        #DefaultValue = true
+        DefaultValue = true
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Configure Slurm job accounting
 
@@ -873,21 +908,21 @@ Order = 20
         Label = Slurm DBD URL
         Description = URL of the database to use for Slurm job accounting
         #itv
-        #DefaultValue = "azusdshpcmysql.mysql.database.azure.com"
+        DefaultValue = "azusdshpcmysql.mysql.database.azure.com"
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_storageloc]]]
         Label = Database name
         Description = Database name to store slurm accounting records
         #itv
-        #DefaultValue = "genomics"        
+        DefaultValue = "genomics"        
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_user]]]
         Label = Slurm DBD User
         Description = User for Slurm DBD admin
         #itv
-        #DefaultValue = "dbmysql_ds_usr"
+        DefaultValue = "dbmysql_ds_usr"
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_password]]]
@@ -895,7 +930,7 @@ Order = 20
         Description = Password for Slurm DBD admin
         ParameterType = Password
         #itv
-        #DefaultValue = "teste"        
+        DefaultValue = "incluir a senha"        
         Conditions.Excluded := configuration_slurm_accounting_enabled isnt true
 
         [[[parameter configuration_slurm_accounting_certificate_url]]]
@@ -906,8 +941,7 @@ Order = 20
         Config.Plugin = pico.form.Dropdown
         Config.FreeForm = true
         Config.Entries := {[Value=""], [Value="AzureCA.pem"]}
-        #itv
-        #DefaultValue = "https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem"
+        DefaultValue = "https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem"
 
         [[[parameter configuration_slurm_shutdown_policy]]]
 	    Label = Shutdown Policy
@@ -1005,32 +1039,38 @@ Order = 20
         #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
-
-        [[[parameter HPCImageName]]]
-        Label = HPC OS
+        #ultra_gen
+        [[[parameter ultra_genImageName]]]
+        Label = ultra_gen OS
         ParameterType = Cloud.Image
         Config.OS = linux
         DefaultValue = almalinux8
         #itv
         #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
+
+        [[[parameter HPCImageName]]]
+        Label = HPC OS
+        ParameterType = Cloud.Image
+        Config.OS = linux
+        #itv
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter HTCImageName]]]
         Label = HTC OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
         #itv
-        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter DynamicImageName]]]
         Label = Dynamic OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
         #itv
-        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"        
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"        
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter SchedulerClusterInitSpecs]]]
@@ -1044,8 +1084,9 @@ Order = 20
         DefaultValue = =undefined
         Description = Cluster init specs to apply to HTC execute nodes
         ParameterType = Cloud.ClusterInitSpecs
-        
+
         #low_gen
+        #itv
         [[[parameter low_genClusterInitSpecs]]]
         Label = low_gen Cluster-Init
         DefaultValue = =undefined
@@ -1053,6 +1094,7 @@ Order = 20
         ParameterType = Cloud.ClusterInitSpecs
 
         #medium_gen
+        #itv
         [[[parameter medium_genClusterInitSpecs]]]
         Label = medium_gen Cluster-Init
         DefaultValue = =undefined
@@ -1060,13 +1102,21 @@ Order = 20
         ParameterType = Cloud.ClusterInitSpecs        
 
         #high_gen
+        #itv
         [[[parameter high_genClusterInitSpecs]]]
         Label = high_gen Cluster-Init
         DefaultValue = =undefined
         Description = Cluster init specs to apply to high_gen execute nodes
         ParameterType = Cloud.ClusterInitSpecs        
 
-
+        #ultra_gen
+        #itv
+        [[[parameter ultra_genClusterInitSpecs]]]
+        Label = ultra_gen Cluster-Init
+        DefaultValue = =undefined
+        Description = Cluster init specs to apply to ultra_gen execute nodes
+        ParameterType = Cloud.ClusterInitSpecs   
+        
         [[[parameter HPCClusterInitSpecs]]]
         Label = HPC Cluster-Init
         DefaultValue = =undefined

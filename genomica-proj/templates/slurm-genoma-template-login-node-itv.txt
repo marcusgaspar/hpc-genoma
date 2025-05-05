@@ -182,15 +182,13 @@ Autoscale = $Autoscale
         InitialCount = $NumberLoginNodes
         MachineType = $loginMachineType
         ImageName = $SchedulerImageName
-        SubnetId = "/subscriptions/2d33a7c2-811d-403b-b70d-49d48f690c7c/resourceGroups/mg-rg-hpc/providers/Microsoft.Network/virtualNetworks/mg-vnet-hpc-eastus/subnets/user-subnet"
         #itv
-        #SubnetId = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdsnetrg/providers/Microsoft.Network/virtualNetworks/azusdshpcvnet/subnets/azusdshpcsnet"
+        SubnetId = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdsnetrg/providers/Microsoft.Network/virtualNetworks/azusdshpcvnet/subnets/azusdshpcsnet"
 
     	[[[network-interface vm-login-node-cluster1-nic2]]]
 	    #NetworkInterfaceId = ""
-        PrivateIp = "10.4.2.250"
         #itv
-        #PrivateIp = "10.20.3.62"
+        PrivateIp = "10.20.3.60"
 
         [[[cluster-init cyclecloud/slurm:login:3.0.7]]]
         [[[configuration]]]
@@ -368,36 +366,32 @@ Order = 10
         Label = low_gen VM Type
         Description = The VM type for low_gen execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_F32s_v2
+        DefaultValue = Standard_F32s_v2
 
         #medium_gen
         [[[parameter medium_genMachineType]]]
         Label = medium_gen VM Type
         Description = The VM type for medium_gen execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_F64s_v2
+        DefaultValue = Standard_F64s_v2
 
         #high_gen
         [[[parameter high_genMachineType]]]
         Label = high_gen VM Type
         Description = The VM type for high_gen execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_E64as_v5        
+        DefaultValue = Standard_E64as_v5        
 
         #ultra_gen
         [[[parameter ultra_genMachineType]]]
         Label = ultra_gen VM Type
         Description = The VM type for ultra_gen execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_FX4mds
         #itv
-        #DefaultValue = Standard_E64as_v5   
+        DefaultValue = Standard_E64as_v5   
 
         [[[parameter HPCMachineType]]]
         Label = HPC VM Type
@@ -787,6 +781,7 @@ Order = 15
         [[[parameter AdditionalNFSMountPoint1]]]
         Label = Mount Point
         Description = The path at which to mount the Filesystem
+        #itv
         DefaultValue = /data1
         Conditions.Excluded := AdditionalNFS1 isnt true
 
@@ -1011,9 +1006,8 @@ Order = 20
         Label = low_gen OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
         #itv
-        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         #medium_gen
@@ -1021,9 +1015,8 @@ Order = 20
         Label = medium_gen OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
         #itv
-        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         #high_gen
@@ -1031,9 +1024,8 @@ Order = 20
         Label = high_gen OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
         #itv
-        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         #ultra_gen
@@ -1041,9 +1033,8 @@ Order = 20
         Label = ultra_gen OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = almalinux8
         #itv
-        #DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
+        DefaultValue = "/subscriptions/09addf29-d567-4494-9d05-db2491ceff53/resourceGroups/azusdshpcrg/providers/Microsoft.Compute/galleries/azusdshpcgal/images/AlmaLInux-HPC-Compute-Image/versions/1.0.0"
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.ubuntu20", "cycle.image.ubuntu22", "cycle.image.sles15-hpc", "almalinux8"}
 
         [[[parameter HPCImageName]]]
